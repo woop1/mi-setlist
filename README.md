@@ -15,7 +15,7 @@ Aplicación web que permite buscar canciones usando la API de iTunes, crear play
 
 Las historias de usuario del proyecto se encuentran en:
 
-[HISTORIAS.md](HISTORIAS.md)
+[HISTORIAS.md](HISTORIA.md)
 
 Principales funcionalidades:
 
