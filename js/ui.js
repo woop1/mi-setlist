@@ -41,9 +41,10 @@ export function mostrarCanciones(canciones) {
         <p>${cancion.artista}</p>
         <p>${formatearDuracion(cancion.duracion)}</p>
 
-        <button>
-          ➕ Agregar
+        <button class="btn-agregar" data-id="${cancion.id}">
+        ➕ Agregar
         </button>
+
       </div>
     `;
 
@@ -77,9 +78,42 @@ export function mostrarPlaylists(playlists) {
     elemento.innerHTML = `
       <h3>🎵 ${playlist.nombre}</h3>
       <p>${playlist.canciones.length} canciones</p>
+
+<div class="canciones-playlist">
+  ${
+    playlist.canciones.map(cancion => `
+      <div>
+        <p>🎵 Canción agregada</p>
+        <small>
+          Agregada:
+          ${new Date(cancion.fechaAgregado).toLocaleDateString()}
+        </small>
+      </div>
+    `).join("")
+  }
+</div>
+
     `;
 
     listaPlaylists.appendChild(elemento);
+
+  });
+
+}
+
+export function activarBotonesAgregar(callback) {
+
+  const botones = document.querySelectorAll(".btn-agregar");
+
+  botones.forEach((boton) => {
+
+    boton.addEventListener("click", () => {
+
+      const id = boton.dataset.id;
+
+      callback(id);
+
+    });
 
   });
 

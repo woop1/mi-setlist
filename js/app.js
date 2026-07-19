@@ -4,7 +4,8 @@ import {
   mostrarCarga,
   mostrarSinResultados,
   mostrarError,
-  mostrarPlaylists
+  mostrarPlaylists,
+  activarBotonesAgregar
 } from "./ui.js";
 import { estado } from "./state.js";
 
@@ -63,6 +64,7 @@ formulario.addEventListener("submit", async (evento) => {
     }
 
     mostrarCanciones(canciones);
+    activarBotonesAgregar(agregarCancion);
 
   } catch (error) {
 
@@ -73,3 +75,27 @@ formulario.addEventListener("submit", async (evento) => {
   }
 
 });
+
+function agregarCancion(idCancion) {
+
+  if (estado.playlists.length === 0) {
+    alert("Primero crea una playlist");
+    return;
+  }
+
+
+  const playlist = estado.playlists[0];
+
+
+  const cancion = {
+    id: idCancion,
+    fechaAgregado: new Date()
+  };
+
+
+  playlist.canciones.push(cancion);
+
+
+  mostrarPlaylists(estado.playlists);
+
+}
