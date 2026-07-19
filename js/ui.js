@@ -61,3 +61,26 @@ function formatearDuracion(milisegundos) {
     .toString()
     .padStart(2, "0")}`;
 }
+
+const listaPlaylists = document.querySelector("#lista-playlists");
+
+export function mostrarPlaylists(playlists) {
+
+  listaPlaylists.innerHTML = "";
+
+  playlists.forEach((playlist) => {
+
+    const elemento = document.createElement("article");
+
+    elemento.className = "playlist";
+
+    elemento.innerHTML = `
+      <h3>🎵 ${playlist.nombre}</h3>
+      <p>${playlist.canciones.length} canciones</p>
+    `;
+
+    listaPlaylists.appendChild(elemento);
+
+  });
+
+}
