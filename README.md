@@ -15,7 +15,7 @@ Aplicación web que permite buscar canciones usando la API de iTunes, crear play
 
 Las historias de usuario del proyecto se encuentran en:
 
-[HISTORIAS.md](HISTORIA.md)
+[HISTORIA.md](HISTORIA.md)
 
 Principales funcionalidades:
 
@@ -34,7 +34,7 @@ Principales funcionalidades:
 1. Clonar el repositorio:
 
 ```bash
-git clone URL_DEL_REPOSITORIO
+git clone https://github.com/woop1/mi-setlist.git
 ```
 
 2. Entrar a la carpeta del proyecto:
