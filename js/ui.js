@@ -7,8 +7,6 @@ const resultados = document.querySelector("#resultados");
 const listaPlaylists = document.querySelector("#lista-playlists");
 const estadisticas = document.querySelector("#estadisticas");
 
-let cancionesMostradas = [];
-
 
 // ==========================================
 // HU1 - Buscar canciones
@@ -16,10 +14,11 @@ let cancionesMostradas = [];
 
 export function mostrarCarga() {
   resultados.innerHTML = `
-    <p class="mensaje">⏳ Buscando canciones...</p>
+    <p class="mensaje">
+      ⏳ Buscando canciones...
+    </p>
   `;
 }
-
 
 export function mostrarSinResultados(texto) {
   resultados.innerHTML = `
@@ -29,7 +28,6 @@ export function mostrarSinResultados(texto) {
   `;
 }
 
-
 export function mostrarError() {
   resultados.innerHTML = `
     <p class="mensaje">
@@ -38,52 +36,39 @@ export function mostrarError() {
   `;
 }
 
-
 export function mostrarCanciones(canciones) {
-  cancionesMostradas = canciones;
-
-
   resultados.innerHTML = "";
 
   canciones.forEach((cancion) => {
-
     const tarjeta = document.createElement("article");
-
     tarjeta.className = "tarjeta-cancion";
 
     tarjeta.innerHTML = `
       <img src="${cancion.imagen}" alt="${cancion.nombre}">
-
       <div>
         <h3>${cancion.nombre}</h3>
         <p>👤 ${cancion.artista}</p>
         <p>⏱ ${formatearDuracion(cancion.duracion)}</p>
 
-        <button class="btn-agregar" data-cancion='${JSON.stringify(cancion)}'>
-        ➕ Agregar
+        <button 
+          class="btn-agregar" 
+          data-cancion='${JSON.stringify(cancion)}'
+        >
+          ➕ Agregar
         </button>
-
-
       </div>
     `;
 
     resultados.appendChild(tarjeta);
-
   });
-
 }
 
-
 function formatearDuracion(milisegundos) {
-
   const segundos = Math.floor(milisegundos / 1000);
-
   const minutos = Math.floor(segundos / 60);
-
   const resto = segundos % 60;
 
-  return `${minutos}:${resto.toString().padStart(2,"0")}`;
-
+  return `${minutos}:${resto.toString().padStart(2, "0")}`;
 }
 
 
@@ -93,141 +78,104 @@ function formatearDuracion(milisegundos) {
 // HU6 - Eliminar playlist
 // ==========================================
 
-export function mostrarPlaylists(playlists){
-  listaPlaylists.innerHTML="";
+export function mostrarPlaylists(playlists) {
+  listaPlaylists.innerHTML = "";
 
-  playlists.forEach((playlist)=>{
+  playlists.forEach((playlist) => {
+    const elemento = document.createElement("article");
+    elemento.className = "playlist";
 
-    const elemento=document.createElement("article");
-
-    elemento.className="playlist";
-
-    elemento.innerHTML=`
+    elemento.innerHTML = `
       <h3>🎵 ${playlist.nombre}</h3>
       <p>${playlist.canciones.length} canciones</p>
 
+      <button class="btn-eliminar-playlist" data-id="${playlist.id}">
+        🗑️ Eliminar Playlist
+      </button>
+
       <div class="canciones-playlist">
-
-        ${
-          playlist.canciones.length === 0
+      ${
+        playlist.canciones.length === 0
           ? `<p>No hay canciones todavía 🎧</p>`
-          :
-          playlist.canciones.map((cancion)=>`
+          : playlist.canciones
+              .map(
+                (cancion) => `
+                <div class="cancion-playlist">
+                  <img src="${cancion.imagen}" width="60" alt="${cancion.nombre}">
+                  <p>🎵 ${cancion.nombre}</p>
+                  <p>👤 ${cancion.artista}</p>
+                  <small>
+                    📅 Agregada: ${new Date(cancion.fechaAgregado).toLocaleDateString()}
+                  </small>
 
-            <div class="cancion-playlist">
-
-              <img 
-                src="${cancion.imagen}" 
-                width="60"
-                alt="${cancion.nombre}"
-              >
-
-              <p>
-                🎵 ${cancion.nombre}
-              </p>
-
-              <p>
-                👤 ${cancion.artista}
-              </p>
-
-              <small>
-                📅 Agregada:
-                ${new Date(cancion.fechaAgregado).toLocaleDateString()}
-              </small>
-
-              <button class="btn-eliminar-cancion" data-id="${cancion.id}">
-              🗑️ Eliminar
-              </button>
-
-
-            </div>
-
-          `).join("")
-        }
-
+                  <button 
+                    class="btn-eliminar-cancion" 
+                    data-id="${cancion.id}" 
+                    data-playlist-id="${playlist.id}"
+                  >
+                    🗑️ Eliminar
+                  </button>
+                </div>
+              `
+              )
+              .join("")
+      }
       </div>
     `;
 
     listaPlaylists.appendChild(elemento);
-
   });
 }
 
-
-// ==========================================
-// Botón agregar canción
-// ==========================================
 
 // ==========================================
 // HU3 - Agregar canciones
-// Envía la canción completa al app.js
 // ==========================================
 
-export function activarBotonesAgregar(callback){
-  const botones=document.querySelectorAll(".btn-agregar");
+export function activarBotonesAgregar(callback) {
+  const botones = document.querySelectorAll(".btn-agregar");
 
-  botones.forEach((boton)=>{
-    boton.addEventListener("click",()=>{
-
-      const cancion=JSON.parse(boton.dataset.cancion);
-
+  botones.forEach((boton) => {
+    boton.onclick = () => {
+      const cancion = JSON.parse(boton.dataset.cancion);
       callback(cancion);
-
-    });
+    };
   });
 }
 
 
-
-
 // ==========================================
-// HU5 - Botón eliminar canción
+// HU5 - Eliminar canciones
 // ==========================================
 
-export function activarBotonesEliminarCancion(callback) {
+export function activarBotonesEliminar(callback) {
+  const botones = document.querySelectorAll(".btn-eliminar-cancion");
 
-  const botones =
-  document.querySelectorAll(".btn-eliminar-cancion");
+  botones.forEach((boton) => {
+    boton.onclick = () => {
+      const idCancion = boton.dataset.id;
+      const idPlaylist = boton.dataset.playlistId;
 
-
-  botones.forEach((boton)=>{
-
-    boton.addEventListener("click",()=>{
-
-      callback(
-        boton.dataset.playlist,
-        boton.dataset.cancion
-      );
-
-    });
-
+      // Pasa ambos IDs al callback por si tu lógica requiere saber de qué playlist borrar
+      callback(idCancion, idPlaylist);
+    };
   });
-
 }
 
 
 // ==========================================
-// HU6 - Botón eliminar playlist
+// HU6 - Eliminar playlist
 // ==========================================
 
 export function activarBotonesEliminarPlaylist(callback) {
+  const botones = document.querySelectorAll(".btn-eliminar-playlist");
 
-  const botones =
-  document.querySelectorAll(".btn-eliminar-playlist");
-
-
-  botones.forEach((boton)=>{
-
-    boton.addEventListener("click",()=>{
-
-      callback(
-        boton.dataset.id
-      );
-
-    });
-
+  botones.forEach((boton) => {
+    boton.onclick = () => {
+      const id = boton.dataset.id;
+      callback(id);
+    };
   });
-
 }
 
 
@@ -236,47 +184,14 @@ export function activarBotonesEliminarPlaylist(callback) {
 // ==========================================
 
 export function mostrarEstadisticas(datos) {
-
-  if (!estadisticas) return;
-
+  if (!estadisticas) {
+    return;
+  }
 
   estadisticas.innerHTML = `
-
-    <p>
-    🎵 Canciones:
-    ${datos.cantidad}
-    </p>
-
-    <p>
-    ⏱ Duración:
-    ${datos.duracion}
-    </p>
-
-    <p>
-    👤 Artista principal:
-    ${datos.artista}
-    </p>
-
-    <p>
-    🎸 Género:
-    ${datos.genero}
-    </p>
-
+    <p>🎵 Canciones: ${datos.cantidad}</p>
+    <p>⏱ Duración: ${datos.duracion}</p>
+    <p>👤 Artista principal: ${datos.artista}</p>
+    <p>🎸 Género: ${datos.genero}</p>
   `;
-
-}
-
-
-export function activarBotonesEliminar(callback){
-  const botones=document.querySelectorAll(".btn-eliminar-cancion");
-
-  botones.forEach((boton)=>{
-    boton.onclick=()=>{
-
-      const id=boton.dataset.id;
-
-      callback(id);
-
-    };
-  });
 }

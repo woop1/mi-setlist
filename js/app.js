@@ -12,8 +12,8 @@ import {
   mostrarError,
   mostrarPlaylists,
   activarBotonesAgregar,
-  activarBotonesEliminar
-
+  activarBotonesEliminar,
+  activarBotonesEliminarPlaylist
 } from "./ui.js";
 
 import { estado } from "./state.js";
@@ -25,7 +25,6 @@ import {
 
 
 // Elementos HTML
-
 const formulario = document.querySelector("#form-busqueda");
 const inputBusqueda = document.querySelector("#input-busqueda");
 
@@ -34,36 +33,33 @@ const inputPlaylist = document.querySelector("#input-playlist");
 
 
 // ==========================================
-// HU8 - Guardar información
-// Cargar playlists al abrir la página
+// HU8 - Guardar información / Inicialización
 // ==========================================
 
-estado.playlists=cargar();
+function renderizarYReactivar() {
+  mostrarPlaylists(estado.playlists);
+  activarBotonesEliminar(eliminarCancion);
+  activarBotonesEliminarPlaylist(eliminarPlaylist);
+}
 
-mostrarPlaylists(estado.playlists);
-
-activarBotonesEliminar(eliminarCancion);
-
+// Cargar datos guardados e inicializar vistas y eventos
+estado.playlists = cargar() || [];
+renderizarYReactivar();
 
 
 // ==========================================
 // HU2 - Crear una playlist
 // ==========================================
 
-formularioPlaylist.addEventListener("submit",(evento)=>{
-
+formularioPlaylist.addEventListener("submit", (evento) => {
   evento.preventDefault();
 
   const nombre = inputPlaylist.value.trim();
 
-  if(!nombre){
-
+  if (!nombre) {
     alert("Escribe un nombre para la playlist");
-
     return;
-
   }
-
 
   const nuevaPlaylist = {
     id: crypto.randomUUID(),
@@ -71,17 +67,12 @@ formularioPlaylist.addEventListener("submit",(evento)=>{
     canciones: []
   };
 
+  estado.playlists.push(nuevaPlaylist);
+  guardar(estado.playlists);
 
-estado.playlists.push(nuevaPlaylist);
-
-guardar(estado.playlists);
-
-mostrarPlaylists(estado.playlists);
-
-
+  renderizarYReactivar();
 
   inputPlaylist.value = "";
-
 });
 
 
@@ -89,106 +80,117 @@ mostrarPlaylists(estado.playlists);
 // HU1 - Buscar canciones
 // ==========================================
 
-formulario.addEventListener("submit",async(evento)=>{
-
+formulario.addEventListener("submit", async (evento) => {
   evento.preventDefault();
-
 
   const texto = inputBusqueda.value.trim();
 
-
-  if(!texto){
-
+  if (!texto) {
     return;
-
   }
 
-
-  try{
-
+  try {
     mostrarCarga();
-
 
     const canciones = await buscarCanciones(texto);
 
-
-    if(canciones.length === 0){
-
+    if (canciones.length === 0) {
       mostrarSinResultados(texto);
-
       return;
-
     }
 
-
     mostrarCanciones(canciones);
-
-
     activarBotonesAgregar(agregarCancion);
 
-
-  }catch(error){
-
+  } catch (error) {
     mostrarError();
-
-    console.error(error);
-
+    console.error("Error al buscar canciones:", error);
   }
-
 });
 
 
 // ==========================================
 // HU3 - Agregar canciones
-// Guarda la información completa de la canción
 // ==========================================
 
-function agregarCancion(cancion){
-
-  if(estado.playlists.length===0){
+function agregarCancion(cancion) {
+  if (estado.playlists.length === 0) {
     alert("Primero crea una playlist");
     return;
   }
 
-  const playlist=estado.playlists[0];
+  // Agrega por defecto a la primera playlist activa
+  const playlist = estado.playlists[0];
 
-  const nuevaCancion={
-    id:cancion.id,
-    nombre:cancion.nombre,
-    artista:cancion.artista,
-    imagen:cancion.imagen,
-    genero:cancion.genero,
-    duracion:cancion.duracion,
-    fechaAgregado:new Date()
+  // Verificar si la canción ya existe en esta playlist
+  const yaExiste = playlist.canciones.some(
+    (item) => String(item.id) === String(cancion.id)
+  );
+
+  if (yaExiste) {
+    alert(`La canción "${cancion.nombre}" ya está en la playlist "${playlist.nombre}".`);
+    return;
+  }
+
+  const nuevaCancion = {
+    id: cancion.id,
+    nombre: cancion.nombre,
+    artista: cancion.artista,
+    imagen: cancion.imagen,
+    genero: cancion.genero,
+    duracion: cancion.duracion,
+    fechaAgregado: new Date()
   };
 
-playlist.canciones.push(nuevaCancion);
+  playlist.canciones.push(nuevaCancion);
 
-guardar(estado.playlists);
-
-mostrarPlaylists(estado.playlists);
-
-}
-
-function eliminarCancion(idCancion){
-
-const confirmar=confirm("¿Eliminar esta canción?");
-
-if(!confirmar){
-return;
-}
-
-estado.playlists[0].canciones =
-estado.playlists[0].canciones.filter(
-(cancion)=>cancion.id != idCancion
-);
-
-guardar(estado.playlists);
-
-mostrarPlaylists(estado.playlists);
-
-activarBotonesEliminar(eliminarCancion);
-
+  guardar(estado.playlists);
+  renderizarYReactivar();
 }
 
 
+// ==========================================
+// HU5 - Eliminar canciones
+// ==========================================
+
+function eliminarCancion(idCancion, idPlaylist) {
+  const confirmar = confirm("¿Eliminar esta canción?");
+
+  if (!confirmar) {
+    return;
+  }
+
+  // Si se pasa idPlaylist lo usamos; de lo contrario fallback a la primera playlist
+  const targetPlaylist = idPlaylist
+    ? estado.playlists.find((p) => String(p.id) === String(idPlaylist))
+    : estado.playlists[0];
+
+  if (targetPlaylist) {
+    targetPlaylist.canciones = targetPlaylist.canciones.filter(
+      (cancion) => String(cancion.id) !== String(idCancion)
+    );
+
+    guardar(estado.playlists);
+    renderizarYReactivar();
+  }
+}
+
+
+// ==========================================
+// HU6 - Eliminar playlist
+// ==========================================
+
+function eliminarPlaylist(idPlaylist) {
+  const confirmar = confirm("¿Eliminar esta playlist?");
+
+  if (!confirmar) {
+    return;
+  }
+
+  estado.playlists = estado.playlists.filter(
+    (playlist) => String(playlist.id) !== String(idPlaylist)
+  );
+
+  guardar(estado.playlists);
+  renderizarYReactivar();
+}
