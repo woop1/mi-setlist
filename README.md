@@ -40,4 +40,4 @@ Principales funcionalidades:
 1. Clonar el repositorio:
 
 ```bash
-git clone [https://github.com/woop1/mi-setlist.git](https://github.com/woop1/mi-setlist.git)
+git clone https://github.com/woop1/mi-setlist.git
