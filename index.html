@@ -1,71 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎵 Mi Setlist</title>
-  <link rel="stylesheet" href="./css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎵 Mi Setlist</title>
+<link rel="stylesheet" href="./css/styles.css">
 </head>
 
 <body>
 
-  <header>
-    <h1>🎵 Mi Setlist</h1>
-    <p>Busca tus canciones favoritas y crea tu playlist</p>
-  </header>
+<header>
+<h1>🎵 Mi Setlist</h1>
+<p>Busca y organiza tu música</p>
+</header>
 
-  <main>
+<main>
 
-    <section>
-      <h2>Buscar canciones</h2>
+<section class="busqueda">
+<h2>🔎 Buscar canciones</h2>
 
-      <form id="form-busqueda">
-        <input 
-          id="input-busqueda"
-          type="text"
-          placeholder="Ejemplo: Soda Stereo"
-        >
+<form id="form-busqueda">
+<input id="input-busqueda" type="text" placeholder="Artista o canción">
+<button type="submit">Buscar</button>
+</form>
 
-        <button type="submit">
-          🔍 Buscar
-        </button>
-      </form>
+</section>
 
-    </section>
+<div class="app">
 
-    <section>
-      <h2>Resultados</h2>
+<section class="contenido">
+<h2>🎵 Resultados</h2>
 
-      <div id="resultados">
-        <p>Busca una canción para comenzar 🎵</p>
-      </div>
+<div id="resultados">
+<p class="mensaje">Busca una canción para comenzar 🎧</p>
+</div>
 
-    </section>
-
-    <section>
-  <h2>Mis Playlists</h2>
-
-  <form id="form-playlist">
-    <input
-      id="input-playlist"
-      type="text"
-      placeholder="Nombre de playlist"
-    >
-
-    <button type="submit">
-      Crear playlist
-    </button>
-  </form>
-
-  <div id="lista-playlists">
-    <p>Aún no tienes playlists 🎧</p>
-  </div>
 </section>
 
 
-  </main>
+<aside>
 
-  <script type="module" src="js/app.js"></script>
+<h2>🎧 Mis Playlists</h2>
+
+<form id="form-playlist">
+<input id="input-playlist" type="text" placeholder="Nombre playlist">
+<button type="submit">Crear</button>
+</form>
+
+<div id="lista-playlists">
+<p class="mensaje">No tienes playlists todavía</p>
+</div>
+
+</aside>
+
+</div>
+
+</main>
+
+<script type="module" src="js/app.js"></script>
 
 </body>
 </html>

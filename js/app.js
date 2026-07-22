@@ -1,4 +1,10 @@
+// ==========================================
+// APP.JS - Mi Setlist
+// Controla los eventos de la aplicación
+// ==========================================
+
 import { buscarCanciones } from "./api.js";
+
 import {
   mostrarCanciones,
   mostrarCarga,
@@ -7,66 +13,117 @@ import {
   mostrarPlaylists,
   activarBotonesAgregar
 } from "./ui.js";
+
 import { estado } from "./state.js";
 
+import {
+  guardar,
+  cargar
+} from "./storage.js";
+
+
+// Elementos HTML
 
 const formulario = document.querySelector("#form-busqueda");
 const inputBusqueda = document.querySelector("#input-busqueda");
+
 const formularioPlaylist = document.querySelector("#form-playlist");
 const inputPlaylist = document.querySelector("#input-playlist");
 
-formularioPlaylist.addEventListener("submit", (evento) => {
+
+// ==========================================
+// HU8 - Guardar información
+// Cargar playlists al abrir la página
+// ==========================================
+
+estado.playlists=cargar();
+
+mostrarPlaylists(estado.playlists);
+
+
+
+// ==========================================
+// HU2 - Crear una playlist
+// ==========================================
+
+formularioPlaylist.addEventListener("submit",(evento)=>{
 
   evento.preventDefault();
 
   const nombre = inputPlaylist.value.trim();
 
+  if(!nombre){
 
-  if (!nombre) {
     alert("Escribe un nombre para la playlist");
+
     return;
+
   }
 
 
   const nuevaPlaylist = {
     id: crypto.randomUUID(),
-    nombre,
+    nombre: nombre,
     canciones: []
   };
 
 
-  estado.playlists.push(nuevaPlaylist);
+estado.playlists.push(nuevaPlaylist);
 
-  mostrarPlaylists(estado.playlists);
+guardar(estado.playlists);
+
+mostrarPlaylists(estado.playlists);
+
+
 
   inputPlaylist.value = "";
 
 });
 
-formulario.addEventListener("submit", async (evento) => {
+
+// ==========================================
+// HU1 - Buscar canciones
+// ==========================================
+
+formulario.addEventListener("submit",async(evento)=>{
+
   evento.preventDefault();
+
 
   const texto = inputBusqueda.value.trim();
 
-  if (!texto) {
+
+  if(!texto){
+
     return;
+
   }
 
-  try {
+
+  try{
 
     mostrarCarga();
 
+
     const canciones = await buscarCanciones(texto);
 
-    if (canciones.length === 0) {
+
+    if(canciones.length === 0){
+
       mostrarSinResultados(texto);
+
       return;
+
     }
 
+
     mostrarCanciones(canciones);
+
+
     activarBotonesAgregar(agregarCancion);
 
-  } catch (error) {
+
+  }catch(error){
 
     mostrarError();
 
@@ -76,26 +133,36 @@ formulario.addEventListener("submit", async (evento) => {
 
 });
 
-function agregarCancion(idCancion) {
 
-  if (estado.playlists.length === 0) {
+// ==========================================
+// HU3 - Agregar canciones
+// Guarda la información completa de la canción
+// ==========================================
+
+function agregarCancion(cancion){
+
+  if(estado.playlists.length===0){
     alert("Primero crea una playlist");
     return;
   }
 
+  const playlist=estado.playlists[0];
 
-  const playlist = estado.playlists[0];
-
-
-  const cancion = {
-    id: idCancion,
-    fechaAgregado: new Date()
+  const nuevaCancion={
+    id:cancion.id,
+    nombre:cancion.nombre,
+    artista:cancion.artista,
+    imagen:cancion.imagen,
+    genero:cancion.genero,
+    duracion:cancion.duracion,
+    fechaAgregado:new Date()
   };
 
+playlist.canciones.push(nuevaCancion);
 
-  playlist.canciones.push(cancion);
+guardar(estado.playlists);
 
-
-  mostrarPlaylists(estado.playlists);
+mostrarPlaylists(estado.playlists);
 
 }
+
