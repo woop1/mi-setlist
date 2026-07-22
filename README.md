@@ -41,3 +41,5 @@ Principales funcionalidades:
 
 ```bash
 git clone https://github.com/woop1/mi-setlist.git
+
+![Vista previa de Mi Setlist](img/Proyecto.png)
