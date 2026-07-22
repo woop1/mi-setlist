@@ -127,3 +127,39 @@
 - Al recargar la página las playlists siguen disponibles.
 - Si ocurre un problema con los datos guardados, aparece un mensaje.
 - Existe una opción para comenzar de nuevo.
+
+
+---
+
+# 🚀 Funcionalidades Extra & Mejoras V2 (Beyond Specs)
+
+Se integraron las siguientes mejoras avanzadas para elevar la aplicación a una experiencia multimedia completa tipo Spotify/Apple Music:
+
+---
+
+## HU9 (Extra) - Reproductor Global Multimedia
+
+**Como** usuario  
+**Quiero** un reproductor flotante en la parte inferior de la pantalla  
+**Para** escuchar las canciones de mis playlists de forma continua y personalizada.
+
+### Criterios de aceptación
+- [x] La barra del reproductor permanece **fija y centrada** en la parte inferior de la pantalla.
+- [x] Incluye un selector desplegable que carga automáticamente todas las playlists creadas.
+- [x] Permite cambiar el modo de reproducción entre **▶️ En Orden** y **🔀 Aleatorio (Shuffle)**.
+- [x] Al finalizar una canción (30 segundos de vista previa de iTunes), pasa **automáticamente** a la siguiente pista de la cola.
+- [x] Permite avanzar o retroceder de canción manualmente mediante botones de pista anterior (⏮️) y siguiente (⏭️).
+
+---
+
+## 🎨 Mejora de UI/UX - Rediseño Dark Neón & Glassmorphism
+
+**Como** usuario  
+**Quiero** una interfaz moderna con tema oscuro, efectos de transparencia y diseño responsivo  
+**Para** tener una navegación atractiva e intuitiva desde cualquier dispositivo.
+
+### Criterios de aceptación
+- [x] Estética visual basada en tonos oscuros con gradientes púrpuras y efectos neón en botones y títulos.
+- [x] Tarjetas de contenido con efecto *Glassmorphism* (fondo translúcido con desenfoque `backdrop-filter`).
+- [x] Adaptación responsiva que reorganiza la barra del reproductor y las secciones en dispositivos móviles.
+- [x] Integración de la tipografía moderna *Plus Jakarta Sans* y personalización de la barra de desplazamiento (*scrollbar*).

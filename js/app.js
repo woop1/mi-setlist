@@ -24,6 +24,12 @@ import {
   cargar
 } from "./storage.js";
 
+// 🔊 IMPORTANTE: Importamos el módulo del reproductor global
+import {
+  actualizarSelectorPlaylists,
+  inicializarReproductor
+} from "./player.js";
+
 
 // Elementos HTML
 const formulario = document.querySelector("#form-busqueda");
@@ -41,6 +47,9 @@ const btnReset = document.querySelector("#btn-reset"); // HU8
 function renderizarYReactivar() {
   mostrarPlaylists(estado.playlists);
   
+  // 🔊 Mantiene actualizado el selector del reproductor con las playlists actuales
+  actualizarSelectorPlaylists(estado.playlists);
+  
   // Si agregaste las estadísticas en ui.js, se invocan aquí:
   if (typeof calcularYMostrarEstadisticas === "function") {
     calcularYMostrarEstadisticas(estado.playlists);
@@ -53,6 +62,9 @@ function renderizarYReactivar() {
 // Cargar datos guardados e inicializar vistas y eventos
 estado.playlists = cargar() || [];
 renderizarYReactivar();
+
+// 🔊 Inicializamos los eventos del reproductor (controles, cambio de pista, aleatorio)
+inicializarReproductor(() => estado.playlists);
 
 
 // ==========================================
@@ -184,7 +196,7 @@ function agregarCancion(cancion) {
     return;
   }
 
-  // 4. Crear el objeto de la canción con su fecha de agregado
+  // 4. Crear el objeto de la canción con su fecha de agregado y el link de audio
   const nuevaCancion = {
     id: cancion.id,
     nombre: cancion.nombre,
@@ -192,6 +204,7 @@ function agregarCancion(cancion) {
     imagen: cancion.imagen,
     genero: cancion.genero,
     duracion: cancion.duracion,
+    preview: cancion.preview,
     fechaAgregado: new Date()
   };
 
@@ -199,7 +212,7 @@ function agregarCancion(cancion) {
   playlistObjetivo.canciones.push(nuevaCancion);
 
   guardar(estado.playlists);
-  renderizarYReactivar(); // ✅ ¡AQUÍ ESTABA EL ERROR! Usamos renderizarYReactivar()
+  renderizarYReactivar();
 
   alert(`"${cancion.nombre}" se agregó a "${playlistObjetivo.nombre}" 🎵`);
 }

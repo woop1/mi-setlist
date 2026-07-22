@@ -111,17 +111,22 @@ export function mostrarPlaylists(playlists) {
           : "";
 
         htmlCanciones += `
-          <div class="cancion-item" style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <img src="${cancion.imagen}" alt="${cancion.nombre}" width="40" height="40" style="border-radius:4px;">
-              <div>
-                <strong style="display:block; font-size:0.9rem;">${cancion.nombre}</strong>
-                <small style="color:#94a3b8;">${cancion.artista} • ${fecha}</small>
+          <div class="cancion-item" style="display:flex; flex-direction:column; gap:6px; margin-top:10px; padding-bottom:8px; border-bottom:1px solid #1e293b;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <img src="${cancion.imagen}" alt="${cancion.nombre}" width="40" height="40" style="border-radius:4px;">
+                <div>
+                  <strong style="display:block; font-size:0.9rem;">${cancion.nombre}</strong>
+                  <small style="color:#94a3b8;">${cancion.artista} • ${fecha}</small>
+                </div>
               </div>
+              <button class="btn-eliminar-cancion" data-id="${cancion.id}" data-playlist-id="${playlist.id}" style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">
+                ❌
+              </button>
             </div>
-            <button class="btn-eliminar-cancion" data-id="${cancion.id}" data-playlist-id="${playlist.id}" style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">
-              ❌
-            </button>
+
+            <!-- 🔊 Reproductor HTML5 de la vista previa (30s) en la playlist -->
+            ${cancion.preview ? `<audio controls src="${cancion.preview}" style="height:28px; width:100%; margin-top:4px;"></audio>` : ''}
           </div>
         `;
       });
@@ -208,7 +213,6 @@ export function mostrarEstadisticas(datos) {
   `;
 }
 
-// ✅ ESTA FUNCIÓN FALTABA EXPORTAR PARA CALCULAR LOS DATOS:
 export function calcularYMostrarEstadisticas(playlists) {
   if (!estadisticas) return;
 
