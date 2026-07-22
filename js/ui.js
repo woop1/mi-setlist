@@ -135,6 +135,11 @@ export function mostrarPlaylists(playlists){
                 ${new Date(cancion.fechaAgregado).toLocaleDateString()}
               </small>
 
+              <button class="btn-eliminar-cancion" data-id="${cancion.id}">
+              🗑️ Eliminar
+              </button>
+
+
             </div>
 
           `).join("")
@@ -259,4 +264,19 @@ export function mostrarEstadisticas(datos) {
 
   `;
 
+}
+
+
+export function activarBotonesEliminar(callback){
+  const botones=document.querySelectorAll(".btn-eliminar-cancion");
+
+  botones.forEach((boton)=>{
+    boton.onclick=()=>{
+
+      const id=boton.dataset.id;
+
+      callback(id);
+
+    };
+  });
 }

@@ -11,7 +11,9 @@ import {
   mostrarSinResultados,
   mostrarError,
   mostrarPlaylists,
-  activarBotonesAgregar
+  activarBotonesAgregar,
+  activarBotonesEliminar
+
 } from "./ui.js";
 
 import { estado } from "./state.js";
@@ -39,6 +41,8 @@ const inputPlaylist = document.querySelector("#input-playlist");
 estado.playlists=cargar();
 
 mostrarPlaylists(estado.playlists);
+
+activarBotonesEliminar(eliminarCancion);
 
 
 
@@ -165,4 +169,26 @@ guardar(estado.playlists);
 mostrarPlaylists(estado.playlists);
 
 }
+
+function eliminarCancion(idCancion){
+
+const confirmar=confirm("¿Eliminar esta canción?");
+
+if(!confirmar){
+return;
+}
+
+estado.playlists[0].canciones =
+estado.playlists[0].canciones.filter(
+(cancion)=>cancion.id != idCancion
+);
+
+guardar(estado.playlists);
+
+mostrarPlaylists(estado.playlists);
+
+activarBotonesEliminar(eliminarCancion);
+
+}
+
 
