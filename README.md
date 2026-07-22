@@ -8,6 +8,12 @@
 
 Aplicación web que permite buscar canciones usando la API de iTunes, crear playlists personales, organizarlas y reproducirlas de forma continua con un reproductor global interactivo, manteniendo la persistencia de datos en el navegador.
 
+## 👁️ Vista Previa
+
+<p align="center">
+  <img src="img/Proyecto.png" alt="Vista previa de Mi Setlist" width="850">
+</p>
+
 ## 🚀 Stack utilizado
 
 - HTML5
@@ -41,5 +47,3 @@ Principales funcionalidades:
 
 ```bash
 git clone https://github.com/woop1/mi-setlist.git
-
-![Vista previa de Mi Setlist](img/Proyecto.png)
