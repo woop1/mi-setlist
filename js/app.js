@@ -13,7 +13,8 @@ import {
   mostrarPlaylists,
   activarBotonesAgregar,
   activarBotonesEliminar,
-  activarBotonesEliminarPlaylist
+  activarBotonesEliminarPlaylist,
+  calcularYMostrarEstadisticas // HU7
 } from "./ui.js";
 
 import { estado } from "./state.js";
@@ -30,14 +31,21 @@ const inputBusqueda = document.querySelector("#input-busqueda");
 
 const formularioPlaylist = document.querySelector("#form-playlist");
 const inputPlaylist = document.querySelector("#input-playlist");
+const btnReset = document.querySelector("#btn-reset"); // HU8
 
 
 // ==========================================
-// HU8 - Guardar información / Inicialización
+// HU8 - Función centralizada de renderizado
 // ==========================================
 
 function renderizarYReactivar() {
   mostrarPlaylists(estado.playlists);
+  
+  // Si agregaste las estadísticas en ui.js, se invocan aquí:
+  if (typeof calcularYMostrarEstadisticas === "function") {
+    calcularYMostrarEstadisticas(estado.playlists);
+  }
+
   activarBotonesEliminar(eliminarCancion);
   activarBotonesEliminarPlaylist(eliminarPlaylist);
 }
@@ -45,6 +53,22 @@ function renderizarYReactivar() {
 // Cargar datos guardados e inicializar vistas y eventos
 estado.playlists = cargar() || [];
 renderizarYReactivar();
+
+
+// ==========================================
+// HU8 - Opción "Comenzar de nuevo" (Reset)
+// ==========================================
+
+if (btnReset) {
+  btnReset.addEventListener("click", () => {
+    const confirmar = confirm("¿Seguro que quieres borrar todas tus playlists y comenzar de nuevo?");
+    if (confirmar) {
+      localStorage.removeItem("mi-setlist");
+      estado.playlists = [];
+      renderizarYReactivar();
+    }
+  });
+}
 
 
 // ==========================================
@@ -110,28 +134,57 @@ formulario.addEventListener("submit", async (evento) => {
 
 
 // ==========================================
-// HU3 - Agregar canciones
+// HU3 - Agregar canciones a una playlist específica
 // ==========================================
 
 function agregarCancion(cancion) {
+  // 1. Validar si existen playlists
   if (estado.playlists.length === 0) {
-    alert("Primero crea una playlist");
+    alert("Primero debes crear al menos una playlist.");
     return;
   }
 
-  // Agrega por defecto a la primera playlist activa
-  const playlist = estado.playlists[0];
+  let playlistObjetivo = estado.playlists[0];
 
-  // Verificar si la canción ya existe en esta playlist
-  const yaExiste = playlist.canciones.some(
+  // 2. Si hay más de una playlist, le preguntamos al usuario a cuál agregar
+  if (estado.playlists.length > 1) {
+    const opciones = estado.playlists
+      .map((p, index) => `${index + 1}. ${p.nombre}`)
+      .join("\n");
+
+    const respuesta = prompt(
+      `¿A qué playlist deseas agregar "${cancion.nombre}"?\nEscribe el número correspondiente:\n\n${opciones}`
+    );
+
+    // Si el usuario cancela la ventana emergente
+    if (respuesta === null) return;
+
+    const indiceElegido = parseInt(respuesta) - 1;
+
+    // Validar si la opción ingresada es válida
+    if (
+      isNaN(indiceElegido) ||
+      indiceElegido < 0 ||
+      indiceElegido >= estado.playlists.length
+    ) {
+      alert("Opción no válida. La canción no se agregó.");
+      return;
+    }
+
+    playlistObjetivo = estado.playlists[indiceElegido];
+  }
+
+  // 3. Validar si la canción ya existe en LA PLAYLIST SELECCIONADA
+  const yaExiste = playlistObjetivo.canciones.some(
     (item) => String(item.id) === String(cancion.id)
   );
 
   if (yaExiste) {
-    alert(`La canción "${cancion.nombre}" ya está en la playlist "${playlist.nombre}".`);
+    alert(`La canción "${cancion.nombre}" ya está en la playlist "${playlistObjetivo.nombre}".`);
     return;
   }
 
+  // 4. Crear el objeto de la canción con su fecha de agregado
   const nuevaCancion = {
     id: cancion.id,
     nombre: cancion.nombre,
@@ -142,10 +195,13 @@ function agregarCancion(cancion) {
     fechaAgregado: new Date()
   };
 
-  playlist.canciones.push(nuevaCancion);
+  // 5. Insertar en la playlist elegida, guardar y refrescar UI
+  playlistObjetivo.canciones.push(nuevaCancion);
 
   guardar(estado.playlists);
-  renderizarYReactivar();
+  renderizarYReactivar(); // ✅ ¡AQUÍ ESTABA EL ERROR! Usamos renderizarYReactivar()
+
+  alert(`"${cancion.nombre}" se agregó a "${playlistObjetivo.nombre}" 🎵`);
 }
 
 
@@ -160,7 +216,6 @@ function eliminarCancion(idCancion, idPlaylist) {
     return;
   }
 
-  // Si se pasa idPlaylist lo usamos; de lo contrario fallback a la primera playlist
   const targetPlaylist = idPlaylist
     ? estado.playlists.find((p) => String(p.id) === String(idPlaylist))
     : estado.playlists[0];
