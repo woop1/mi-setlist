@@ -3,6 +3,7 @@
 // Maneja lo que aparece en pantalla
 // ==========================================
 
+// Referencias a los contenedores principales de la interfaz visual en la página
 const resultados = document.querySelector("#resultados");
 const listaPlaylists = document.querySelector("#lista-playlists");
 const estadisticas = document.querySelector("#estadisticas");
@@ -12,6 +13,7 @@ const estadisticas = document.querySelector("#estadisticas");
 // HU1 - Buscar canciones
 // ==========================================
 
+// Muestra un mensaje temporal mientras se buscan canciones en internet
 export function mostrarCarga() {
   resultados.innerHTML = `
     <p class="mensaje">
@@ -20,6 +22,7 @@ export function mostrarCarga() {
   `;
 }
 
+// Muestra un aviso cuando la búsqueda no arroja ningún resultado
 export function mostrarSinResultados(texto) {
   resultados.innerHTML = `
     <p class="mensaje">
@@ -28,6 +31,7 @@ export function mostrarSinResultados(texto) {
   `;
 }
 
+// Muestra un aviso de error si ocurre un fallo al intentar buscar
 export function mostrarError() {
   resultados.innerHTML = `
     <p class="mensaje">
@@ -36,33 +40,36 @@ export function mostrarError() {
   `;
 }
 
+// Recibe la lista de canciones encontradas y crea tarjetas visuales para cada una en la pantalla
 export function mostrarCanciones(canciones) {
-  resultados.innerHTML = "";
+  resultados.innerHTML = ""; // Limpia los resultados anteriores
 
   canciones.forEach((cancion) => {
     const tarjeta = document.createElement("article");
     tarjeta.className = "tarjeta-cancion";
 
+    // Inserta la estructura HTML de la tarjeta con la imagen, título, artista, duración y botón de agregar
     tarjeta.innerHTML = `
-      <img src="${cancion.imagen}" alt="${cancion.nombre}">
-      <div>
-        <h3>${cancion.nombre}</h3>
-        <p>👤 ${cancion.artista}</p>
-        <p>⏱ ${formatearDuracion(cancion.duracion)}</p>
+    <img src="${cancion.imagen}" alt="${cancion.nombre}">
+    <div>
+      <h3>${cancion.nombre}</h3>
+      <p>👤 ${cancion.artista}</p>
+      <p>⏱ ${formatearDuracion(cancion.duracion)}</p>
 
-        <button 
-          class="btn-agregar" 
-          data-cancion='${JSON.stringify(cancion)}'
-        >
-          ➕ Agregar
-        </button>
-      </div>
-    `;
+      <button 
+        class="btn-agregar" 
+        data-cancion='${JSON.stringify(cancion)}'
+      >
+        ➕ Agregar
+      </button>
+    </div>
+  `;
 
-    resultados.appendChild(tarjeta);
+  resultados.appendChild(tarjeta);
   });
 }
 
+// Convierte la duración de milisegundos a un formato de minutos y segundos legible (ej. 3:45)
 function formatearDuracion(milisegundos) {
   const segundos = Math.floor(milisegundos / 1000);
   const minutos = Math.floor(segundos / 60);
@@ -78,20 +85,21 @@ function formatearDuracion(milisegundos) {
 // HU6 - Eliminar playlist
 // ==========================================
 
+// Dibuja en la interfaz todas las playlists del usuario con sus respectivas canciones
 export function mostrarPlaylists(playlists) {
   const contenedor = document.querySelector("#lista-playlists");
   if (!contenedor) return;
 
-  // 1. Si no hay playlists
+  // 1. Si no hay playlists creadas, muestra un mensaje indicándolo
   if (!playlists || playlists.length === 0) {
     contenedor.innerHTML = `<p class="mensaje">No tienes playlists todavía</p>`;
     return;
   }
 
-  // 2. Limpiar contenido previo
+  // 2. Limpiar contenido previo del contenedor
   contenedor.innerHTML = "";
 
-  // 3. Renderizar CADA playlist existente
+  // 3. Recorre y renderiza CADA playlist existente
   playlists.forEach((playlist) => {
     const playlistDiv = document.createElement("div");
     playlistDiv.classList.add("playlist-card");
@@ -102,6 +110,7 @@ export function mostrarPlaylists(playlists) {
 
     let htmlCanciones = "";
 
+    // Si la playlist está vacía, muestra un aviso; si tiene canciones, genera el HTML de cada una
     if (playlist.canciones.length === 0) {
       htmlCanciones = `<p class="mensaje" style="font-size: 0.85rem;">Sin canciones agregadas</p>`;
     } else {
@@ -132,6 +141,7 @@ export function mostrarPlaylists(playlists) {
       });
     }
 
+    // Estructura visual principal de la tarjeta de la playlist (título, botón de eliminar lista y sus canciones)
     playlistDiv.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <h3 style="margin:0; font-size:1.1rem; color:#f8fafc;">🎵 ${playlist.nombre}</h3>
@@ -153,6 +163,7 @@ export function mostrarPlaylists(playlists) {
 // HU3 - Agregar canciones
 // ==========================================
 
+// Asocia la acción de hacer clic en los botones de agregar canción con la función encargada de procesarlo
 export function activarBotonesAgregar(callback) {
   const botones = document.querySelectorAll(".btn-agregar");
 
@@ -169,6 +180,7 @@ export function activarBotonesAgregar(callback) {
 // HU5 - Eliminar canciones
 // ==========================================
 
+// Configura los eventos de clic en los botones de eliminar canción para extraer sus identificadores
 export function activarBotonesEliminar(handlerEliminarCancion) {
   const botones = document.querySelectorAll(".btn-eliminar-cancion");
   botones.forEach((btn) => {
@@ -185,6 +197,7 @@ export function activarBotonesEliminar(handlerEliminarCancion) {
 // HU6 - Eliminar playlist
 // ==========================================
 
+// Configura los eventos de clic en los botones de eliminar playlist para capturar su ID
 export function activarBotonesEliminarPlaylist(handlerEliminarPlaylist) {
   const botones = document.querySelectorAll(".btn-eliminar-playlist");
   botones.forEach((btn) => {
@@ -200,6 +213,7 @@ export function activarBotonesEliminarPlaylist(handlerEliminarPlaylist) {
 // HU7 - Estadísticas
 // ==========================================
 
+// Muestra los datos estadísticos calculados directamente en pantalla
 export function mostrarEstadisticas(datos) {
   if (!estadisticas) {
     return;
@@ -213,10 +227,11 @@ export function mostrarEstadisticas(datos) {
   `;
 }
 
+// Calcula métricas globales de todas las playlists (cantidad, duración total, artista y género favorito)
 export function calcularYMostrarEstadisticas(playlists) {
   if (!estadisticas) return;
 
-  // Unir todas las canciones de todas las playlists
+  // Une todas las canciones de todas las playlists en una sola lista temporal
   const todasLasCanciones = playlists.flatMap((p) => p.canciones || []);
 
   if (todasLasCanciones.length === 0) {
@@ -224,14 +239,14 @@ export function calcularYMostrarEstadisticas(playlists) {
     return;
   }
 
-  // 1. Cantidad
+  // 1. Cantidad total de canciones
   const cantidad = todasLasCanciones.length;
 
-  // 2. Duración Total
+  // 2. Duración Total sumando los milisegundos y convirtiéndolos a minutos
   const totalMs = todasLasCanciones.reduce((acc, c) => acc + (c.duracion || 0), 0);
   const totalMinutos = Math.floor(totalMs / 60000);
 
-  // 3. Artista Principal
+  // 3. Calcula cuál es el artista que más se repite (Artista Principal)
   const conteoArtistas = {};
   todasLasCanciones.forEach((c) => {
     conteoArtistas[c.artista] = (conteoArtistas[c.artista] || 0) + 1;
@@ -240,7 +255,7 @@ export function calcularYMostrarEstadisticas(playlists) {
     conteoArtistas[a] > conteoArtistas[b] ? a : b
   );
 
-  // 4. Género Principal
+  // 4. Calcula cuál es el género musical que más abunda (Género Principal)
   const conteoGeneros = {};
   todasLasCanciones.forEach((c) => {
     if (c.genero) {
@@ -252,7 +267,7 @@ export function calcularYMostrarEstadisticas(playlists) {
     ? generosKeys.reduce((a, b) => conteoGeneros[a] > conteoGeneros[b] ? a : b)
     : "N/A";
 
-  // Mostrar en pantalla
+  // Envía los datos procesados para mostrarlos en pantalla
   mostrarEstadisticas({
     cantidad: `${cantidad}`,
     duracion: `${totalMinutos} min`,

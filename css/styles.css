@@ -1,10 +1,12 @@
 /* ==========================================
-   ESTILOS PREMIUM - MI SETLIST 🎵
-   Diseño tipo Spotify / Apple Music (Dark Neón)
+    ESTILOS PREMIUM - MI SETLIST 🎵
+    Diseño tipo Spotify / Apple Music (Dark Neón)
    ========================================== */
 
+/* Importación de la tipografía moderna Plus Jakarta Sans desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
+/* Variables globales de colores, fuentes y efectos de diseño (Dark Theme) */
 :root {
   --bg-dark: #0b0f19;
   --bg-card: rgba(22, 30, 49, 0.75);
@@ -21,12 +23,14 @@
   --danger-color: #f43f5e;
 }
 
+/* Configuración inicial universal: elimina márgenes por defecto y estandariza las cajas */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* Estilos generales del cuerpo de la página (Fondo con degradados sutiles y tipografía) */
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--bg-dark);
@@ -37,11 +41,11 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   padding: 24px;
-  padding-bottom: 120px; /* Espacio para el reproductor fijo */
+  padding-bottom: 120px; /* Espacio reservado para el reproductor fijo inferior */
   min-height: 100vh;
 }
 
-/* Scrollbar Personalizado */
+/* Scrollbar Personalizado (Barra de desplazamiento moderna) */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -57,7 +61,7 @@ body {
 }
 
 /* ==========================================
-   HEADER
+    HEADER (ENCABEZADO)
    ========================================== */
 
 header {
@@ -65,6 +69,7 @@ header {
   text-align: center;
 }
 
+/* Título principal con efecto de texto degradado brillante */
 header h1 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -82,13 +87,13 @@ header p {
 }
 
 /* ==========================================
-   BUSCADOR DE CANCIONES
+    BUSCADOR DE CANCIONES
    ========================================== */
 
 .busqueda {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Efecto cristal desenfocado */
   border: 1px solid var(--border-glass);
   padding: 20px;
   border-radius: 16px;
@@ -105,11 +110,13 @@ header p {
   gap: 8px;
 }
 
+/* Distribución en línea para los formularios de búsqueda y playlists */
 #form-busqueda, #form-playlist {
   display: flex;
   gap: 12px;
 }
 
+/* Campos de entrada de texto (Inputs) */
 #input-busqueda, #input-playlist {
   flex: 1;
   background: rgba(15, 23, 42, 0.6);
@@ -122,12 +129,14 @@ header p {
   transition: all 0.3s ease;
 }
 
+/* Efecto visual al hacer clic o escribir en los inputs */
 #input-busqueda:focus, #input-playlist:focus {
   outline: none;
   border-color: var(--accent-neon);
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
+/* Estilos generales para todos los botones de la aplicación */
 button {
   background: var(--accent-gradient);
   color: #ffffff;
@@ -141,6 +150,7 @@ button {
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
+/* Efecto hover (al pasar el mouse por encima) de los botones */
 button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
@@ -152,9 +162,10 @@ button:active {
 }
 
 /* ==========================================
-   ESTRUCTURA PRINCIPAL (GRID)
+    ESTRUCTURA PRINCIPAL (GRID / REJILLA)
    ========================================== */
 
+/* Distribuye la pantalla en dos columnas: resultados a la izquierda, playlists a la derecha */
 .app {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -183,7 +194,7 @@ button:active {
 }
 
 /* ==========================================
-   RESULTADOS Y TARJETAS DE CANCIONES
+    RESULTADOS Y TARJETAS DE CANCIONES
    ========================================== */
 
 #resultados {
@@ -192,6 +203,7 @@ button:active {
   gap: 12px;
 }
 
+/* Tarjeta individual de cada canción encontrada */
 .tarjeta-cancion {
   display: flex;
   align-items: center;
@@ -203,6 +215,7 @@ button:active {
   transition: all 0.3s ease;
 }
 
+/* Animación y cambio de color al pasar el cursor sobre la tarjeta de canción */
 .tarjeta-cancion:hover {
   background: var(--bg-card-hover);
   border-color: rgba(99, 102, 241, 0.3);
@@ -237,7 +250,7 @@ button:active {
 }
 
 /* ==========================================
-   TARJETAS DE PLAYLISTS
+    TARJETAS DE PLAYLISTS
    ========================================== */
 
 .playlist-card {
@@ -261,14 +274,14 @@ button:active {
 }
 
 /* ==========================================
-   REPRODUCTOR GLOBAL CENTRADO
+    REPRODUCTOR GLOBAL CENTRADO (PIE DE PÁGINA)
    ========================================== */
 
 #reproductor-global {
   position: fixed !important;
   bottom: 20px !important;
   left: 50% !important;
-  transform: translateX(-50%) !important; /* Centrado perfecto horizontal */
+  transform: translateX(-50%) !important; /* Centrado perfecto horizontal en la pantalla */
   width: 90% !important;
   max-width: 950px !important;
   background: rgba(15, 23, 42, 0.9) !important;
@@ -287,37 +300,41 @@ button:active {
   box-sizing: border-box !important;
 }
 
-/* Alineación limpia de los bloques internos */
+/* Distribución de espacios internos del reproductor */
 #reproductor-global > div:first-child {
-  flex: 1 1 220px; /* Información de la canción */
+  flex: 1 1 220px; /* Bloque de información de la canción actual */
   max-width: 280px;
 }
 
 #reproductor-global > div:last-child {
-  flex: 2 1 450px; /* Controles y barra de audio en el centro */
+  flex: 2 1 450px; /* Bloque central con controles y barra de audio */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 /* ==========================================
-   ESTILOS RESPONSIVE (MÓVILES)
+    ESTILOS RESPONSIVE (DISPOSITIVOS MÓVILES)
    ========================================== */
 
 @media (max-width: 850px) {
+  /* En pantallas pequeñas, pasa de dos columnas a una sola columna vertical */
   .app {
     grid-template-columns: 1fr;
   }
   
+  /* Ajusta el reproductor fijo para que ocupe todo el ancho inferior en celulares */
   #reproductor-global {
     flex-direction: column;
     bottom: 0;
-    width: 100%;
+    left: 0;
+    transform: none !important;
+    width: 100% !important;
     border-radius: 18px 18px 0 0 !important;
     padding: 14px !important;
   }
   
   body {
-    padding-bottom: 180px;
+    padding-bottom: 180px; /* Mayor espacio inferior para que el reproductor móvil no tape nada */
   }
 }

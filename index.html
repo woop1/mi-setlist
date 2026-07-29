@@ -1,51 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Configuración básica de codificación de caracteres y escala adaptable para móviles -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Título que aparece en la pestaña del navegador -->
   <title>🎵 Mi Setlist</title>
+  
+  <!-- Enlace a la hoja de estilos principal (CSS) -->
   <link rel="stylesheet" href="./css/styles.css">
 </head>
 
-<body style="padding-bottom: 90px;"> <!-- Espacio adicional para que el reproductor fijo no tape contenido -->
+<!-- Espacio adicional abajo (padding-bottom) para evitar que el reproductor fijo tape el contenido final -->
+<body style="padding-bottom: 90px;"> 
 
+  <!-- ========================================== -->
+  <!-- ENCABEZADO DE LA PÁGINA                     -->
+  <!-- ========================================== -->
   <header>
     <h1>🎵 Mi Setlist</h1>
     <p>Busca y organiza tu música</p>
   </header>
 
+  <!-- ========================================== -->
+  <!-- CUERPO PRINCIPAL DE LA APLICACIÓN          -->
+  <!-- ========================================== -->
   <main>
 
+    <!-- Sección superior: Formulario para buscar canciones -->
     <section class="busqueda">
       <h2>🔎 Buscar canciones</h2>
 
+      <!-- Formulario de búsqueda con su respectiva entrada de texto y botón -->
       <form id="form-busqueda">
         <input id="input-busqueda" type="text" placeholder="Artista o canción">
         <button type="submit">Buscar</button>
       </form>
     </section>
 
+    <!-- Contenedor principal que divide los resultados a la izquierda y las playlists a la derecha -->
     <div class="app">
 
+      <!-- Sección izquierda: Resultados obtenidos de la búsqueda -->
       <section class="contenido">
         <h2>🎵 Resultados</h2>
 
+        <!-- Contenedor donde se cargarán dinámicamente las tarjetas de canciones -->
         <div id="resultados">
           <p class="mensaje">Busca una canción para comenzar 🎧</p>
         </div>
       </section>
 
+      <!-- Sección derecha / panel lateral: Gestión y visualización de Playlists -->
       <aside>
         <h2>🎧 Mis Playlists</h2>
 
-        <form id="form-playlist">
+        <!-- Formulario para crear una nueva playlist -->
+      <form id="form-playlist">
           <input id="input-playlist" type="text" placeholder="Nombre playlist">
           <button type="submit">Crear</button>
         </form>
 
-        <div id="lista-playlists">
+        <!-- Contenedor donde se dibujarán las listas creadas por el usuario -->
+      <div id="lista-playlists">
           <p class="mensaje">No tienes playlists todavía</p>
-        </div>
+      </div>
       </aside>
 
     </div>
@@ -53,44 +73,45 @@
   </main>
 
   <!-- ========================================== -->
-  <!-- REPRODUCTOR GLOBAL INFERIOR                -->
+  <!-- REPRODUCTOR GLOBAL INFERIOR (FIJO)         -->
   <!-- ========================================== -->
   <footer id="reproductor-global" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a; border-top: 1px solid #334155; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; box-shadow: 0 -4px 12px rgba(0,0,0,0.4); z-index: 1000; box-sizing: border-box;">
     
-    <!-- Info de la canción actual -->
+    <!-- Columna izquierda: Información visual de la canción actual (imagen, título y artista) -->
     <div style="display: flex; align-items: center; gap: 12px; min-width: 200px;">
       <img id="player-img" src="https://via.placeholder.com/50" alt="Carátula" style="width: 48px; height: 48px; border-radius: 6px; object-fit: cover;">
       <div>
         <strong id="player-titulo" style="display: block; color: #f8fafc; font-size: 0.95rem;">Selecciona una playlist</strong>
         <small id="player-artista" style="color: #94a3b8; font-size: 0.8rem;">---</small>
       </div>
-    </div>
+  </div>
 
-    <!-- Controles de reproducción -->
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; flex-grow: 1; max-width: 500px;">
-      <div style="display: flex; align-items: center; gap: 12px;">
+    <!-- Columna central/derecha: Controles de reproducción y barra de audio -->
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; flex-grow: 1; max-width: 500px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
         
         <!-- Desplegable para seleccionar qué playlist reproducir -->
         <select id="player-select-playlist" style="background: #1e293b; color: #f8fafc; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;">
           <option value="">-- Elige Playlist --</option>
         </select>
 
-        <!-- Botón para alternar Orden / Aleatorio -->
+        <!-- Botón para alternar entre reproducción en Orden o Aleatoria -->
         <button id="btn-modo-reproduccion" style="background: #334155; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;" title="Modo de reproducción">
           ▶️ En Orden
         </button>
 
-        <!-- Controles de pistas -->
+        <!-- Botones de navegación para pasar a la pista anterior o siguiente -->
         <button id="btn-anterior" style="background: transparent; color: white; border: none; font-size: 1.2rem; cursor: pointer;" title="Anterior">⏮️</button>
         <button id="btn-siguiente" style="background: transparent; color: white; border: none; font-size: 1.2rem; cursor: pointer;" title="Siguiente">⏭️</button>
-      </div>
-
-      <!-- Barra de audio HTML5 -->
-      <audio id="audio-principal" controls style="width: 100%; height: 32px;"></audio>
     </div>
+
+      <!-- Barra de audio nativa de HTML5 vinculada al reproductor -->
+    <audio id="audio-principal" controls style="width: 100%; height: 32px;"></audio>
+  </div>
 
   </footer>
 
+  <!-- Archivo de JavaScript principal cargado como módulo -->
   <script type="module" src="js/app.js"></script>
 
 </body>
