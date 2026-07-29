@@ -46,8 +46,6 @@
 
 ## ⚡ Retos técnicos principales (Resueltos)
 
-> **Reto identificado en Sprint 1:** La historia que más me intimidaba era la **HU1 (Buscar canciones)**, porque requería conectarse con una API externa (iTunes), manejar peticiones asíncronas, errores de red y renderizar dinámicamente las carátulas y resultados.
-> 
-> **Resultado:** ¡Superado! Se resolvió utilizando peticiones `fetch` con `async/await` en `api.js`, manejando adecuadamente los bloques `try/catch` y mostrando indicadores de carga, búsqueda vacía y error en la interfaz.
+> **Reto 1:** Al consultar a la IA por la API de iTunes, me devolvió por error una URL vieja de la API de RSS en lugar de la de búsqueda (`search?term=`), lo que hacía que la petición rompiera con un error 404 o datos vacíos que tuve que corregir revisando la estructura oficial.
 
-> **Reto identificado en Sprint 3 (V2):** El desafío principal en la **HU9 (Reproductor Global)** fue desacoplar el estado de reproducción en un módulo propio (`player.js`) para que la barra flotante inferior se mantuviera centrada, sincronizara dinámicamente las playlists de `state.js` y gestionara el paso automático a la siguiente canción (*autoplay queue*).
+> **Reto 2:** Al guardar y recargar las playlists desde el `localStorage`, los objetos de fecha y los métodos internos se corrompían o devolvían `null` al usar `JSON.parse()`, lo que obligó a estructurar validaciones defensivas y un proceso de rehidratación al iniciar la aplicación.
